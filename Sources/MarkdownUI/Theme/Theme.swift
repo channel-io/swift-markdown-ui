@@ -118,6 +118,12 @@ public struct Theme: Sendable {
   /// The link style.
   public var link: TextStyle = EmptyTextStyle()
 
+  /// The background color for inline code views.
+  public var codeBackgroundColor: Color? = nil
+
+  /// The corner radius for inline code views.
+  public var codeCornerRadius: CGFloat = 0
+
   var headings = Array(
     repeating: BlockStyle<BlockConfiguration> { $0.label },
     count: 6
@@ -213,6 +219,22 @@ extension Theme {
   public func code<S: TextStyle>(@TextStyleBuilder code: () -> S) -> Theme {
     var theme = self
     theme.code = code()
+    return theme
+  }
+
+  /// Sets the background color for inline code views.
+  /// - Parameter color: The background color to use.
+  public func codeBackgroundColor(_ color: Color?) -> Theme {
+    var theme = self
+    theme.codeBackgroundColor = color
+    return theme
+  }
+
+  /// Sets the corner radius for inline code views.
+  /// - Parameter radius: The corner radius to use.
+  public func codeCornerRadius(_ radius: CGFloat) -> Theme {
+    var theme = self
+    theme.codeCornerRadius = radius
     return theme
   }
 
@@ -462,6 +484,14 @@ extension Theme {
   public var textBackgroundColor: Color? {
     var attributes = AttributeContainer()
     self.text._collectAttributes(in: &attributes)
+    return attributes.backgroundColor
+  }
+
+  /// The inline code background color of the theme.
+  public var inlineCodeBackgroundColor: Color? {
+    if let color = self.codeBackgroundColor { return color }
+    var attributes = AttributeContainer()
+    self.code._collectAttributes(in: &attributes)
     return attributes.backgroundColor
   }
 }
