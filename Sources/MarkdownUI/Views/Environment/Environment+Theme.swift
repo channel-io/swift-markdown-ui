@@ -40,6 +40,30 @@ extension View {
     self.environment((\EnvironmentValues.theme).appending(path: keyPath), .init(body: body))
   }
 
+  /// Replaces a specific inline style on the current ``Theme`` with an inline style
+  /// initialized with the given body closure.
+  /// - Parameters:
+  ///   - keyPath: The ``Theme`` key path to the inline style to replace.
+  ///   - body: A view builder that receives the inline configuration and returns the customized inline view.
+  public func markdownInlineStyle<Configuration, Body: View>(
+    _ keyPath: WritableKeyPath<Theme, InlineStyle<Configuration>>,
+    @ViewBuilder body: @escaping (_ configuration: Configuration) -> Body
+  ) -> some View {
+    self.environment((\EnvironmentValues.theme).appending(path: keyPath), .init(body: body))
+  }
+
+  /// Replaces a specific inline style on the current ``Theme`` with an inline style
+  /// initialized with the given body closure.
+  /// - Parameters:
+  ///   - keyPath: The ``Theme`` key path to the inline style to replace.
+  ///   - body: A view builder that returns the customized inline view.
+  public func markdownInlineStyle<Body: View>(
+    _ keyPath: WritableKeyPath<Theme, InlineStyle<Void>>,
+    @ViewBuilder body: @escaping () -> Body
+  ) -> some View {
+    self.environment((\EnvironmentValues.theme).appending(path: keyPath), .init(body: body))
+  }
+
   /// Replaces the current ``Theme`` task list marker with the given list marker.
   public func markdownTaskListMarker(
     _ value: BlockStyle<TaskListMarkerConfiguration>
