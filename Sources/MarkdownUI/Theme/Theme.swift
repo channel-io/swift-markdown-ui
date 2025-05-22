@@ -118,6 +118,12 @@ public struct Theme: Sendable {
   /// The link style.
   public var link: TextStyle = EmptyTextStyle()
 
+  /// The inline code style.
+  public var inlineCode = InlineStyle<CodeInlineConfiguration> { $0.label }
+
+  /// The inline link style.
+  public var inlineLink = InlineStyle<LinkInlineConfiguration> { $0.label }
+
   var headings = Array(
     repeating: BlockStyle<BlockConfiguration> { $0.label },
     count: 6
@@ -213,6 +219,26 @@ extension Theme {
   public func code<S: TextStyle>(@TextStyleBuilder code: () -> S) -> Theme {
     var theme = self
     theme.code = code()
+    return theme
+  }
+
+  /// Adds an inline code style to the theme.
+  /// - Parameter body: A view builder that returns the customized inline code view.
+  public func inlineCode<Body: View>(
+    @ViewBuilder body: @escaping (_ configuration: CodeInlineConfiguration) -> Body
+  ) -> Theme {
+    var theme = self
+    theme.inlineCode = .init(body: body)
+    return theme
+  }
+
+  /// Adds an inline link style to the theme.
+  /// - Parameter body: A view builder that returns the customized inline link view.
+  public func inlineLink<Body: View>(
+    @ViewBuilder body: @escaping (_ configuration: LinkInlineConfiguration) -> Body
+  ) -> Theme {
+    var theme = self
+    theme.inlineLink = .init(body: body)
     return theme
   }
 

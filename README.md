@@ -212,6 +212,31 @@ Markdown {
 ![](Sources/MarkdownUI/Documentation.docc/Resources/CustomBlockquote@2x.png#gh-light-mode-only)
 ![](Sources/MarkdownUI/Documentation.docc/Resources/CustomBlockquote~dark@2x.png#gh-dark-mode-only)
 
+You can also replace the default rendering of inline elements using the
+`markdownInlineStyle(_:body:)` modifier.
+
+```swift
+Markdown {
+  "Visit "
+  InlineLink("Swift", destination: URL(string: "https://swift.org")!)
+  " and run "
+  InlineCode("swift build")
+  "."
+}
+.markdownInlineStyle(\.inlineCode) { configuration in
+  configuration.label
+    .padding(4)
+    .background(Color.yellow.opacity(0.2))
+    .clipShape(RoundedRectangle(cornerRadius: 4))
+}
+.markdownInlineStyle(\.inlineLink) { configuration in
+  HStack(spacing: 2) {
+    configuration.label
+    Image(systemName: "link")
+  }
+}
+```
+
 Another way to customize the appearance of Markdown content is to create your own theme. To create
 a theme, start by instantiating an empty `Theme` and chain together the different text and block
 styles in a single expression.
